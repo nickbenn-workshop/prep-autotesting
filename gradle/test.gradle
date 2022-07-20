@@ -23,8 +23,8 @@ dependencies {
 }
 
 task copyTests(type: Copy) {
-    from zipTree(file("$projectDir/.github/workflows/tests.jar"))
-    into "${projectDir}/autotest/"
+    from zipTree(file("${projectDir}/.github/workflows/tests.jar"))
+    into "${buildDir}/autotest/"
 }
 
 task copyReport(type: Copy) {
@@ -42,7 +42,8 @@ test {
     dependsOn 'copyTests'
     classpath -= testClassesDirs
     classpath -= files("${buildDir}/resources/test")
-    testClassesDirs = files("${projectDir}/autotest")
+    testClassesDirs = files("${buildDir}/autotest")
+    classpath += testClassesDirs
     testLogging {
         events 'passed', 'failed', 'skipped'
     }
