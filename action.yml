@@ -1,0 +1,27 @@
+name: Extract
+description: "Prepare to run & autograde JAR-packaged tests."
+inputs:
+  workspace:
+    description: "Base directory of project under test."
+    required: true
+  test-destination:
+    description: "Destination subdirectory of extracted test classes & configuration."
+    required: false
+    default: autotesting
+runs:
+  using: composite
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Setup Java 
+      uses: actions/setup-java@v3
+      with:
+        distribution: corretto
+        java-version: 11
+        architecture: x64
+    - name: Make gradlew executable
+      run: chmod +x ${{ inputs.workspace }}/gradlew
+      shell: bash
+    - name: Move autograding Gradle build files
+      run: mv ${{ github.action_path }}/gradle/* ${{ inputs.workspace }}/
+      shell: bash
